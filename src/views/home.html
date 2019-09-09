@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        font-family: "PingFang SC", "Heiti SC", "Arial", "Microsoft YaHei", "\9ED1\4F53", "\5B8B\4F53", sans-serif
+      }
+
+      .label{
+        /* -webkit-text-stroke: 1px #555555 */
+      }
+
+      #button-ul {
+        display: none
+      }
+
+      #button-ul a {
+        width: 53px;
+        height: 53px;
+        line-height: 53px;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      #button-ul.associate span {
+        display: block
+      }
+
+      #button-ul.associate a {
+        display: block;
+        margin-bottom: 1px;
+        background-color: #F8F8F8;
+        color: #555555;
+      }
+
+      #button-ul.home span {
+        display: inline-block;
+        /* letter-spacing: -.3333em; */
+      }
+
+      #button-ul.home a {
+        display: inline-block;
+        margin-right: 1px;
+        background-color: #222336;
+        color: #636e9c;
+      }
+
+      #button-ul.home a:hover, #button-ul.associate a:hover {
+        background-color: #0068FC;
+        color: #ffffff;
+      }
+
+      #button-ul.home a.active, #button-ul.associate a.active{
+        background-color: #0068FC;
+        color: #ffffff;
+      }
+  
+      #floor a {
+        margin-right: 1px
+      }
+  
+      #gate-group {
+        position: absolute;
+        right: 20px;
+        top: 100px;
+        
+      }
+  
+      .gate-item {
+        cursor: pointer;
+        margin-bottom: 10px;
+        display: none
+      }
+  
+      .gate-item img {
+        width: 20px;
+      }
+  
+      .gate-item span {
+        position: relative;
+        top: -2px;
+        font-size: 13px;
+        color: #555555
+      }
+  
+  
+      .levitaten .title {
+        padding: 3px 2px;
+        color: #ffffff;
+        overflow: hidden;
+        border-bottom: 1px dashed #979797;
+      }
+      .levitaten ul {
+        margin: 0;
+        padding: 4px 2px 0;
+        text-decoration: none;
+        color: #ffffff;
+      }
+      .levitaten .device-list-wrap{
+        height: 85px;
+        overflow: hidden;;
+      }
+      .levitaten .device-list {
+        height: 85px;
+        width: calc(100% + 15px);
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+      .levitaten .device-list .delete--icon{
+        width: 12px;
+        cursor: pointer;
+        float: right;
+        margin: 2px 0;
+      }
+      .levitaten li {
+        height: 20px;
+        line-height: 20px;
+        margin-bottom: 8px;
+        list-style: none;
+        position: relative;
+        overflow: hidden;
+      }
+      .levitaten .text-center{
+        text-align: center;
+      }
+      .levitaten li span {
+        width: 70px;
+        top: -3px;
+        margin-left: 5px;
+        position: absolute;
+      }
+  
+      .levitaten li i {
+        position: absolute;
+        cursor: pointer;
+        right: 0;
+        top: 7px;
+        color: rgba(255, 255, 255, 0.3);
+      }
+  
+      .levitaten {
+        width: 114px;
+        height: 146px;
+        background-color: #162D56;
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        padding: 5px;
+        font-size: 12px;
+        box-sizing: border-box;
+        display: none;
+      }
+      .add-button {
+        text-align: center;
+        line-height: 20px;
+      }
+      .add-button > a {
+        color: #0f9ee9;
+        text-decoration: none;
+      }
+      .add-button:before {
+        content: '';
+        position: absolute;
+        top: 140px;
+        left: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        width: 1px;
+        height: 30px;
+      }
+  
+      .add-button:after {
+        content: '';
+        position: absolute;
+        top: 170px;
+        left: 50%;
+        background: #ffffff;
+        background: rgba(255, 255, 255, 0.5);
+        width: 30px;
+        height: 1px;
+      }
+      .add-button[data-visible=true]:after, .add-button[data-visible=true]:before{
+        display: none;
+      }
+      .pull-left {
+        margin-right: 34px;
+        overflow: hidden;
+      }
+  
+      .pull-right {
+        width: 34px;
+        float: right;
+      }
+      .pull-right > img{
+        width: 12px;
+        cursor: pointer;
+      }
+      .pull-right > img:last-child{
+        margin-left: 4px;
+      }
+      .amount {
+        position: absolute;
+        top: 144px;
+        right: 50px;
+        user-select: none;
+      }
+      .gateway, .count {
+        margin-bottom: 40px;
+        text-align: center;
+      }
+  
+      .title {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 4px;
+      }
+  
+      .count {
+        font-size: 24px;
+        color: #ffffff;
+      }
+
+      #existGate{
+        position: absolute;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 40px;
+      }
+
+      #existGate .tip-text{
+        color: #b4b4b4;
+        font-size: 14px
+      }
+      #existGate .gate-list{
+        margin-top: 10px;
+        padding-bottom: 10px;
+        width: 100%;
+        border-bottom: 1px dashed #F0F0F0;
+      }
+      #existGate .gate-item{
+        display: inline;
+        margin-right: 20px
+      }
+  </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="canvas"></div>
+</body>
+</html>
