@@ -4,7 +4,10 @@ module.exports = {
   entry: {
     community: './src/scene/community.js',
     home: './src/scene/home.js',
-    test: './src/scene/test.js'
+    test: './src/scene/test.js',
+    basic: './src/scene/basic.js',
+    bloom: './src/scene/bloom.js',
+    store: './src/scene/store.js'
   },
   mode: "development",
   plugins: pluginsConfig,

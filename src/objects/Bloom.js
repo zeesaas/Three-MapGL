@@ -8,8 +8,9 @@ class Bloom {
   }
 
   createPic (coord, data) {
-    const group = this.mainGroup.getObjectByName(data.floorIndex)
-    let sprite = this._bloomPicTexture(data.memberInfo.imgUrl)
+    const floorIndex = Math.floor(data.floorIndex)
+    const group = this.mainGroup.getObjectByName(floorIndex)
+    let sprite = this._bloomPicTexture(data.imgUrl)
     sprite.position.set(coord.x, 35, -coord.z)
     sprite.scale.set(25, 25, 1)
     this._bloomPicAnimate(group, sprite)
@@ -17,7 +18,8 @@ class Bloom {
   }
   
   createPoint (coord, groupIndex) {
-    let group = this.mainGroup.getObjectByName(groupIndex)
+    const floorIndex = Math.floor(groupIndex)
+    let group = this.mainGroup.getObjectByName(floorIndex)
     let mesh = this._bloomPointTexture()
     mesh.position.set(coord.x, 10, -coord.z)
     mesh.scale.set(4, 4, 4)

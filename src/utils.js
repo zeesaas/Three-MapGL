@@ -85,3 +85,7 @@ export function createLevitateBox (screenAlex) {
     levitaten.style.display = 'none'
   }
 }
+
+export function getRandom(max, min) {
+  return Math.round((Math.random() * (max - min + 1) + min) * 10) / 10;
+}

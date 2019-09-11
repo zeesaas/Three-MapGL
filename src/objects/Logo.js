@@ -10,6 +10,7 @@ class Logo {
     if (mesh.name === 'store') {
       let center = getCenterExtraPoint(mesh.geometryAttributeArray)
       let color = mesh.userData.color.r * 255 || path.color.r * 255
+      console.log(mesh, color)
       switch (color) {
         case 44:
           Logo[`create${type}`](group, LOGO.ELE, center)

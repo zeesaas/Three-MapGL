@@ -230,7 +230,7 @@ class Map {
   // board
   loadPlane(item, group) {
     const originPosition = (item.floor - 2) * 140 - 65
-    let url = item.planeUrl || './static/bottom2.svg'
+    let url = item.mapBaseboard || './static/bottom2.svg'
     group.userData.positionY = originPosition
     group.userData.positionZ = group.position.z
     this.initTemplate(url, (path, shape) => {

@@ -25,6 +25,7 @@ import {
 import {
   PALLETE
 } from '../constants'
+import { house } from '../../model/home'
 
 /**
  * 功能：
@@ -41,7 +42,7 @@ export default class World {
   static controls // 轨道
 
   stats // 性能监控
-  composer // 后期创作者
+  composer // 后期通道
   afterimagePass // afterImage通道
   fxaaPass // fxaa通道
 
@@ -94,12 +95,16 @@ export default class World {
     
     this.animate()
 
-    window.addEventListener('mousedown', () => {
+    window.addEventListener('mousedown', (event) => {
+      event.stopPropagation();
       this.onDocumentMouseClick(event)
     }, false)
     window.addEventListener('resize', () => {
       this.onWindowResize(event)
     }, false)
+    document.getElementById('back').addEventListener('click', () => {
+      this.handleNavChangeFloor({})
+    })
   }
 
   // 创建商场
@@ -125,6 +130,8 @@ export default class World {
     })
   }
 
+  rayStoreInfo = {}
+  rayCurrentGroup = new THREE.Object3D
   onDocumentMouseClick (event) {
     let raycaster = new Raycaster(event, World.camera, World.renderer.domElement)
     let rayList = []
@@ -143,12 +150,20 @@ export default class World {
         this.createSingleStoreDom(this.rayStoreInfo.name, this.rayCurrentGroup)
       }, () => {
         let data = {name: this.rayStoreInfo.name, floor: this.rayCurrentGroup.userData.floorName}
+        this.backToFloor(data)
         this._postMessage({
           cmd: 'callBackToFloor',
           data: data
+          // data: {}
         })
       })
     }
+  }
+
+  _getGroupInfo (floor) {
+    let group = World.mainGroup.children[floor]
+    let groupInfo = group.userData.groupInfo
+    return groupInfo
   }
 
   onWindowResize() {
@@ -197,6 +212,7 @@ export default class World {
 
     this.floorIndex = basicData.value
     this.tweenFloor.multiToSingle(basicData, name)
+    this.receiveHeatColorInfo(this.floorIndex)
   }
 
   // switch: s - s
@@ -296,19 +312,30 @@ export default class World {
     }
   }
 
+  _isLogoColumn (mesh) {
+    console.log(mesh)
+    const r = mesh.userData.color.r * 255
+    if (r === 44 || r === 45 || r === 46) {
+      return true
+    }
+    return false
+  }
+
   // 首页：绑定颜色块
-  receiveHeatColorInfo (data) {
-    this.heatColorData = data
-    this.heatColorData.forEach(item => {
-      let floorIndex = item.floorIndex
-      World.mainGroup.children[floorIndex - 1].children.forEach(mesh => {
-        if (subArrayToLength(mesh.geometryAttribute) === subArrayToLength(item.coordinates) && mesh.name !== 'floorText') {
-          mesh.material.color = this.setColor(item.type)
-          mesh.userData.storeInfo = item
-          this.storeList.push(mesh)
-          this.bindGateText(item, mesh, floorIndex)
-        }
-      })
+  receiveHeatColorInfo (value) {
+    World.mainGroup.children[value - 1].children.forEach((mesh, key) => {
+      if (key % 2 === 0 && mesh.name === 'store' && !this._isLogoColumn(mesh)) {
+        mesh.material.color = this.setColor(1)
+        this.storeList.push(mesh)
+        this.bindGateText( mesh, value)
+      }
+      // if (mesh.name === 'store' && )
+      // if (subArrayToLength(mesh.geometryAttribute) === subArrayToLength(item.coordinates)) {
+      //   mesh.material.color = this.setColor(item.type)
+      //   mesh.userData.storeInfo = item
+      //   this.storeList.push(mesh)
+      //   this.bindGateText(item, mesh, floorIndex)
+      // }
     })
   }
 
@@ -350,6 +377,7 @@ export default class World {
     mesh.isSingle = false
     let start = { scale: 1.1, opacity: 0.1 }
     let end = { scale: 1, opacity: 1 }
+    console.log(Label2d.arr)
     Label2d.arr.forEach(label => group.add(label))
     this.aabbBox.checkCollusion()
     let action = new TWEEN.Tween(start).to(end, 500).onUpdate(() => {
@@ -390,12 +418,12 @@ export default class World {
   }
 
   // 创建已绑定商店的文字
-  bindGateText(item, mesh, floorIndex) {
-    let label = Label2d.create(item.name, 'gateText', 14)
+  bindGateText(mesh, floorIndex) {
+    let label = Label2d.create('商店名', 'gateText', 14)
     let textCoord = getCenterExtraPoint(mesh.geometryAttributeArray)
-    let aabb = this.aabbBox.create(textCoord, item.name)
+    let aabb = this.aabbBox.create(textCoord, '商店名')
     if (textCoord) {
-      label.position.set(textCoord.cx, 10, -textCoord.cy)
+      label.position.set(textCoord.cx, 1, -textCoord.cy)
       AABBBox.list.push({...aabb})
       label.add(aabb.sprite)
       World.mainGroup.children[floorIndex - 1].add(label)
@@ -454,16 +482,15 @@ window.addEventListener('message', () => {
   handleMessage(event)
 })
 
+houseData = house
+// new MapDom(mode, houseData)
+// new MapStyle(mode)
+world = new World(houseData.floor)
+world.init()
+
 function handleMessage (event) {
   const data = event.data
   switch (data.cmd) {
-    case 'map_data':
-      houseData = data.data
-      new MapDom(mode, houseData)
-      new MapStyle(mode)
-      world = new World(data.floor)
-      world.init()
-      break
     case 'heat_color_data':
       world.receiveHeatColorInfo(data.data.trieNodeList)
       break

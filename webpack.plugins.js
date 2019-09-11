@@ -17,6 +17,18 @@ module.exports = [
   }]),
   // 自动生成html模板
   new htmlWebpackPlugin({
+    filename: "store.html",
+    title: "store",
+    chunks: ['store'],  // 按需引入对应名字的js文件
+    template: "./src/views/store.html"
+  }),
+  new htmlWebpackPlugin({
+    filename: "bloom.html",
+    title: "bloom",
+    chunks: ['bloom'],  // 按需引入对应名字的js文件
+    template: "./src/views/bloom.html"
+  }),
+  new htmlWebpackPlugin({
       filename: "community.html",
       title: "community",
       chunks: ['community'],  // 按需引入对应名字的js文件
@@ -28,6 +40,12 @@ module.exports = [
       chunks: ['home'],
       template: "./src/views/home.html"
   }),
+  new htmlWebpackPlugin({
+    filename: "basic.html",
+    title: "basic",
+    chunks: ['basic'],  // 按需引入对应名字的js文件
+    template: "./src/views/basic.html"
+}),
   new htmlWebpackPlugin({
     filename: "test.html",
     title: "test",

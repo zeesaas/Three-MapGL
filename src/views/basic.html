@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>基础地图展示</title>
+    <style>
       html,
       body {
         width: 100%;
@@ -14,16 +14,26 @@
         padding: 0;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
-        font-family: "PingFang SC", "Heiti SC", "Arial", "Microsoft YaHei", "\9ED1\4F53", "\5B8B\4F53", sans-serif;
-        background: #222336
+        font-family: "PingFang SC", "Heiti SC", "Arial", "Microsoft YaHei",
+          "\9ED1\4F53", "\5B8B\4F53", sans-serif;
+        background: #222336;
       }
 
-      .label{
+      #nav {
+        position: absolute;
+        z-index: 99;
+        top: 10px;
+      }
+      #nav a {
+        color: #f0f0f0;
+      }
+
+      .label {
         /* -webkit-text-stroke: 1px #555555 */
       }
 
       #button-ul {
-        display: none
+        display: none;
       }
 
       #button-ul a {
@@ -36,13 +46,13 @@
       }
 
       #button-ul.associate span {
-        display: block
+        display: block;
       }
 
       #button-ul.associate a {
         display: block;
         margin-bottom: 1px;
-        background-color: #F8F8F8;
+        background-color: #f8f8f8;
         color: #555555;
       }
 
@@ -58,45 +68,45 @@
         color: #636e9c;
       }
 
-      #button-ul.home a:hover, #button-ul.associate a:hover {
-        background-color: #0068FC;
+      #button-ul.home a:hover,
+      #button-ul.associate a:hover {
+        background-color: #0068fc;
         color: #ffffff;
       }
 
-      #button-ul.home a.active, #button-ul.associate a.active{
-        background-color: #0068FC;
+      #button-ul.home a.active,
+      #button-ul.associate a.active {
+        background-color: #0068fc;
         color: #ffffff;
       }
-  
+
       #floor a {
-        margin-right: 1px
+        margin-right: 1px;
       }
-  
+
       #gate-group {
         position: absolute;
         right: 20px;
         top: 100px;
-        
       }
-  
+
       .gate-item {
         cursor: pointer;
         margin-bottom: 10px;
-        display: none
+        display: none;
       }
-  
+
       .gate-item img {
         width: 20px;
       }
-  
+
       .gate-item span {
         position: relative;
         top: -2px;
         font-size: 13px;
-        color: #555555
+        color: #555555;
       }
-  
-  
+
       .levitaten .title {
         padding: 3px 2px;
         color: #ffffff;
@@ -109,9 +119,9 @@
         text-decoration: none;
         color: #ffffff;
       }
-      .levitaten .device-list-wrap{
+      .levitaten .device-list-wrap {
         height: 85px;
-        overflow: hidden;;
+        overflow: hidden;
       }
       .levitaten .device-list {
         height: 85px;
@@ -119,7 +129,7 @@
         overflow-y: scroll;
         overflow-x: hidden;
       }
-      .levitaten .device-list .delete--icon{
+      .levitaten .device-list .delete--icon {
         width: 12px;
         cursor: pointer;
         float: right;
@@ -133,7 +143,7 @@
         position: relative;
         overflow: hidden;
       }
-      .levitaten .text-center{
+      .levitaten .text-center {
         text-align: center;
       }
       .levitaten li span {
@@ -142,7 +152,7 @@
         margin-left: 5px;
         position: absolute;
       }
-  
+
       .levitaten li i {
         position: absolute;
         cursor: pointer;
@@ -150,11 +160,11 @@
         top: 7px;
         color: rgba(255, 255, 255, 0.3);
       }
-  
+
       .levitaten {
         width: 114px;
         height: 146px;
-        background-color: #162D56;
+        background-color: #162d56;
         position: absolute;
         top: 30px;
         left: 30px;
@@ -172,7 +182,7 @@
         text-decoration: none;
       }
       .add-button:before {
-        content: '';
+        content: "";
         position: absolute;
         top: 140px;
         left: 50%;
@@ -180,9 +190,9 @@
         width: 1px;
         height: 30px;
       }
-  
+
       .add-button:after {
-        content: '';
+        content: "";
         position: absolute;
         top: 170px;
         left: 50%;
@@ -191,23 +201,24 @@
         width: 30px;
         height: 1px;
       }
-      .add-button[data-visible=true]:after, .add-button[data-visible=true]:before{
+      .add-button[data-visible="true"]:after,
+      .add-button[data-visible="true"]:before {
         display: none;
       }
       .pull-left {
         margin-right: 34px;
         overflow: hidden;
       }
-  
+
       .pull-right {
         width: 34px;
         float: right;
       }
-      .pull-right > img{
+      .pull-right > img {
         width: 12px;
         cursor: pointer;
       }
-      .pull-right > img:last-child{
+      .pull-right > img:last-child {
         margin-left: 4px;
       }
       .amount {
@@ -216,58 +227,50 @@
         right: 50px;
         user-select: none;
       }
-      .gateway, .count {
+      .gateway,
+      .count {
         margin-bottom: 40px;
         text-align: center;
       }
-  
+
       .title {
         font-size: 12px;
         color: rgba(255, 255, 255, 0.5);
         margin-bottom: 4px;
       }
-  
+
       .count {
         font-size: 24px;
         color: #ffffff;
       }
 
-      #existGate{
+      #existGate {
         position: absolute;
         width: 100%;
         box-sizing: border-box;
         padding: 0 40px;
       }
 
-      #existGate .tip-text{
+      #existGate .tip-text {
         color: #b4b4b4;
-        font-size: 14px
+        font-size: 14px;
       }
-      #existGate .gate-list{
+      #existGate .gate-list {
         margin-top: 10px;
         padding-bottom: 10px;
         width: 100%;
-        border-bottom: 1px dashed #F0F0F0;
+        border-bottom: 1px dashed #f0f0f0;
       }
-      #existGate .gate-item{
+      #existGate .gate-item {
         display: inline;
-        margin-right: 20px
+        margin-right: 20px;
       }
-  </style>
-</head>
-<body>
-  <style>
-    #nav {
-      margin: 10px
-    }
-  #nav a{
-    color: #f0f0f0
-  }
-  </style>
-  <div id="nav">
-    <a href="javascript:;" id="back">返回</a>
-  </div>
-  <div id="map"></div>
-  <div id="canvas"></div>
-</body>
+    </style>
+  </head>
+  <body>
+    <style></style>
+    <div id="nav">
+      <a href="javascript:;" id="back">返回</a>
+    </div>
+  </body>
 </html>
