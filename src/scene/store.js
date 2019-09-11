@@ -51,6 +51,9 @@ export default class Store {
     document.getElementById('update_label').addEventListener('click', () => {
       this.updateGate()
     })
+    document.getElementById('delete_label').addEventListener('click', () => {
+      this.deleteGate()
+    })
   }
 
   animate () {
@@ -62,15 +65,8 @@ export default class Store {
 
   singleMesh
   createGate () {
-    // let gate = new Gate(
-    //   Store.mainGroup,  
-    //   Store.camera.position.z
-    // )
     this.singleMesh = Gate.createRealGate('./static/camera-post.png')
-    let coord = {
-      x: getRandom(200, -200),
-      y: getRandom(120, -120)
-    }
+    let coord = { x: getRandom(200, -200), y: getRandom(120, -120) }
     this.singleMesh.position.set(coord.x, coord.y, 10)
     Store.mainGroup.add(this.singleMesh)
   }
@@ -78,6 +74,11 @@ export default class Store {
   updateGate () {
     let area = this.judgeArea(this.singleMesh.position)
     this.singleMesh.position.set(this.singleMesh.position.x + area.x, this.singleMesh.position.y + area.y, 10)
+  }
+
+  deleteGate () {
+    let gate = Store.mainGroup.getObjectByProperty('name', 'gate')
+    Store.mainGroup.remove(gate)
   }
 
   judgeArea (position) {
