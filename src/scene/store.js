@@ -12,7 +12,7 @@ import AABBBox from "../objects/AABBBox"; // AABB盒子类
 
 import { house } from '../../model/home'
 import { PALLETE } from '../constants'
-import {getCenterExtraPoint} from '../utils'
+import {getCenterExtraPoint, getRandom} from '../utils'
 
 export default class Store {
   static scene // 场景
@@ -48,6 +48,9 @@ export default class Store {
     document.getElementById('add_label').addEventListener('click', () => {
       this.createGate()
     })
+    document.getElementById('update_label').addEventListener('click', () => {
+      this.updateGate()
+    })
   }
 
   animate () {
@@ -57,13 +60,36 @@ export default class Store {
     Store.controls.update()
   }
 
-  createGate (el, e, spriteList, id) {
-    let gate = new Gate(
-      ComWorld.mainGroup,  
-      ComWorld.camera.position.z,
-      ComWorld.schrodingerGate
-    )
-    gate.createRealGate('./static/camera-post.png', e, spriteList, id)
+  singleMesh
+  createGate () {
+    // let gate = new Gate(
+    //   Store.mainGroup,  
+    //   Store.camera.position.z
+    // )
+    this.singleMesh = Gate.createRealGate('./static/camera-post.png')
+    let coord = {
+      x: getRandom(200, -200),
+      y: getRandom(120, -120)
+    }
+    this.singleMesh.position.set(coord.x, coord.y, 10)
+    Store.mainGroup.add(this.singleMesh)
+  }
+
+  updateGate () {
+    let area = this.judgeArea(this.singleMesh.position)
+    this.singleMesh.position.set(this.singleMesh.position.x + area.x, this.singleMesh.position.y + area.y, 10)
+  }
+
+  judgeArea (position) {
+    if (position.x > 0 && position.y > 0) {
+      return {x: -30, y: -30}
+    } else if(position.x < 0 && position.y > 0) {
+      return {x: 30, y: -30}
+    } else if(position.x < 0 && position.y < 0) {
+      return {x: 30, y: 30}
+    } else if(position.x > 0 && position.y < 0) {
+      return {x: -30, y: 30}
+    }
   }
 
   createMall (floorInfo) {
