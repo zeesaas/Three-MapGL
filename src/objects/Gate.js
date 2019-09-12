@@ -6,84 +6,57 @@ class Gate {
     this.depth = depth
     this.schrodingerGate = schrodingerGate
   }
-  create (el, e, spriteList, id) {
-    if (e.target && (e.target.nodeName.toUpperCase() === 'IMG')) {
-      let src = e.target.src.split('/').pop()
-      if (!id) {
-        id = e.target.parentNode.getAttribute('data-id')
-      }
-      let type = parseInt(e.target.parentNode.getAttribute('data-type'))
-      let img = el.children[0].children[0]
-      let box = document.createElement('img')
-      let divX = event.clientX - img.offsetWidth / 2
-      let divY = event.clientY - img.offsetHeight / 2
 
-      box.src = `./static/${src}`
-      box.style.width = '20px'
-      box.style.position = 'absolute'
+  create (cb) {
+
+    let box = document.createElement('img')
+    
+
+    box.src = `./static/camera-inside.png`
+    box.style.width = '20px'
+    box.style.position = 'absolute'
+    let divX = event.clientX - box.offsetWidth / 2
+    let divY = event.clientY - box.offsetHeight / 2
+    box.style.left = divX + 'px'
+    box.style.top = divY + 'px'
+    document.body.appendChild(box)
+
+    document.onmousemove = (event) => {
+      event = event || window.event
+      let divX = event.clientX - box.offsetWidth / 2
+      let divY = event.clientY - box.offsetHeight / 2
       box.style.left = divX + 'px'
       box.style.top = divY + 'px'
-      document.body.appendChild(box)
+    }
 
-      document.onmousemove = (event) => {
-        event = event || window.event
-        let divX = event.clientX - img.offsetWidth / 2
-        let divY = event.clientY - img.offsetHeight / 2
-        box.style.left = divX + 'px'
-        box.style.top = divY + 'px'
-      }
-
-      box.onmousedown = (event) => {
-        event = event || window.event
-        document.onmousemove = null
-        document.body.removeChild(box)
-        let screenWorld = new ScreenWorld(this.depth)
-        let newScreen = screenWorld.translate({
-          x: event.clientX,
-          y: event.clientY
-        })
-        if (Math.abs(newScreen.x) < 291 && 
-            Math.abs(newScreen.y) < 214) {
-          let data = {}
-          let object = new THREE.Object3D()
-          object.name = 'schrodingerName'
-
-          object.position.set(
-            newScreen.x, 
-            newScreen.y - 10, 
-            10
-          )
-
-          if (id) {
-            data = { coord: newScreen, id: id }
-          } else if (type) {
-            data = { coord: newScreen, type: type }
-          }
-          // create gate sprite
-          let meshPic = Gate.createRealGate(box.src, data)
-          object.add(meshPic)
-          meshPic.info = data
-          spriteList.push(meshPic)
-
-          this.group.add(object)
-          this.schrodingerGate.name = object.name
-          this.schrodingerGate.realName = 'gateGroup'
-        }
+    box.onmousedown = (event) => {
+      event = event || window.event
+      document.onmousemove = null
+      document.body.removeChild(box)
+      let screenWorld = new ScreenWorld(this.depth)
+      let newScreen = screenWorld.translate({
+        x: event.clientX,
+        y: event.clientY
+      })
+      if (Math.abs(newScreen.x) < 291 && 
+          Math.abs(newScreen.y) < 214) {
+        let data = {}
+        let object = new THREE.Object3D()
+        object.name = 'schrodingerName'
+        
+        // create gate sprite
+        let meshPic = Gate.createRealGate(box.src, 'schrodingerName')
+        object.add(meshPic)
+        this.group.add(object)
+        cb(object)
       }
     }
   }
 
-  static createRealGate (src, data, trigger = false) {
+  static createRealGate (src, name = 'gate') {
     let scale = new THREE.Vector3(12, 7, 8)
     let mesh = Gate.createPic(src, scale)
-    mesh.name = 'gate'
-
-    if (!trigger) {
-      window.parent.postMessage({
-        cmd: 'gate_info',
-        data: data
-      }, '*')
-    }
+    mesh.name = name
     return mesh
   }
 

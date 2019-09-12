@@ -8,6 +8,7 @@ import Logo from '../objects/Logo'
 import Gate from '../objects/Gate'
 import Label2d from '../objects/Label2d'
 import LabelBase from '../objects/LabelBase'
+import Raycaster from "../objects/Raycaster"
 import AABBBox from "../objects/AABBBox"; // AABB盒子类
 
 import { house } from '../../model/home'
@@ -20,6 +21,7 @@ export default class Store {
   static renderer // 渲染器
   static mainGroup = new THREE.Group() // 商场总分组
   static controls // 轨道
+  static schrodingerGate
 
   width = window.innerWidth // 画布宽
   height = window.innerHeight // 画布高
@@ -54,6 +56,9 @@ export default class Store {
     document.getElementById('delete_label').addEventListener('click', () => {
       this.deleteGate()
     })
+    document.getElementById('custom_label').addEventListener('click', () => {
+      this.customGate()
+    })
   }
 
   animate () {
@@ -72,13 +77,37 @@ export default class Store {
   }
 
   updateGate () {
+    if (!this.singleMesh) { return false }
     let area = this.judgeArea(this.singleMesh.position)
     this.singleMesh.position.set(this.singleMesh.position.x + area.x, this.singleMesh.position.y + area.y, 10)
+    
   }
 
   deleteGate () {
     let gate = Store.mainGroup.getObjectByProperty('name', 'gate')
     Store.mainGroup.remove(gate)
+  }
+
+  customGate () {
+    let gate = new Gate(
+      Store.mainGroup,  
+      Store.camera.position.z,
+      Store.schrodingerGate
+    )
+    gate.create((mesh) => {
+      let raycaster = new Raycaster(
+        event,
+        Store.camera,
+        Store.renderer.domElement
+      )
+      let rayList = Map.planeList
+      raycaster.handleEvent(rayList, intersect => {
+        console.log(intersect)
+        // let point = intersect[0].object.worldToLocal(intersect[0].point)
+        let point = intersect[0].point
+        mesh.position.set(point.x, point.y - 25, 10)
+      })
+    })
   }
 
   judgeArea (position) {
@@ -152,7 +181,7 @@ export default class Store {
   createControls () {
     Store.controls = new OrbitControls(Store.camera)
     Store.controls.screenSpacePanning = false
-    // Store.controls.enableRotate = false
+    Store.controls.enableRotate = false
     Store.controls.saveState()
     Store.controls.addEventListener('change', () => {
       this.aabbBox.update(AABBBox.list)
@@ -167,7 +196,7 @@ export default class Store {
   }
 }
 
-let houseData = house;
-let floorIndex = 1;
+let houseData = house
+let floorIndex = 4
 let store = new Store()
 store.init()

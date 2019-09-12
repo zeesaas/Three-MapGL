@@ -109,7 +109,7 @@ export default class Basic {
       event,
       Basic.camera,
       Basic.renderer.domElement
-    );
+    )
     document.body.style.cursor = "default";
     if (Basic.status === "multi") {
       let rayList = Map.planeList;

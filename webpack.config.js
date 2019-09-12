@@ -7,7 +7,8 @@ module.exports = {
     test: './src/scene/test.js',
     basic: './src/scene/basic.js',
     bloom: './src/scene/bloom.js',
-    store: './src/scene/store.js'
+    coverPicLabel: './src/scene/coverPicLabel.js',
+    afterimage: './src/scene/afterimage.js'
   },
   mode: "development",
   plugins: pluginsConfig,

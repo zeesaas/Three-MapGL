@@ -20,10 +20,15 @@
       }
       #nav {
         position: absolute;
+        z-index: 99;
         top: 10px;
       }
       #nav a {
         color: #f0f0f0;
+      }
+      .tip{
+        color: #f0f0f0;
+        font-size: 12px
       }
     </style>
   </head>
@@ -34,5 +39,12 @@
       <a href="javascript:;" id="stop_loop">停止循环</a>
       <a href="javascript:;" id="shine_post">通道闪烁</a>
     </div>
+    <div id="nav">
+        <p class="tip" style="color: antiquewhite; margin-top: 30px">发光方案汇总: </p>
+        <p class="tip">1 - 自定义几何体和着色器材质</p>
+        <p class="tip">2 - Texture</p>
+        <p class="tip">3 - unrealBloom通道</p>
+        <p class="tip">4 - Canvas</p>
+      </div>
   </body>
 </html>

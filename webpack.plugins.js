@@ -17,10 +17,16 @@ module.exports = [
   }]),
   // 自动生成html模板
   new htmlWebpackPlugin({
-    filename: "store.html",
-    title: "store",
-    chunks: ['store'],  // 按需引入对应名字的js文件
-    template: "./src/views/store.html"
+    filename: "afterimage.html",
+    title: "afterimage",
+    chunks: ['afterimage'],  // 按需引入对应名字的js文件
+    template: "./src/views/afterimage.html"
+  }),
+  new htmlWebpackPlugin({
+    filename: "coverPicLabel.html",
+    title: "coverPicLabel",
+    chunks: ['coverPicLabel'],  // 按需引入对应名字的js文件
+    template: "./src/views/cover_picLabel.html"
   }),
   new htmlWebpackPlugin({
     filename: "bloom.html",

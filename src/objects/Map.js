@@ -267,6 +267,7 @@ class Map {
       mesh.scale.set(1, -1, 1)
       mesh.position.z = -5
       mesh.userData = { groupInfo: floorInfo }
+      Map.planeList.push(mesh)
       group.add(mesh)
       options.opacity ? group.userData.isShow = true : group.userData.isShow = false
     })
